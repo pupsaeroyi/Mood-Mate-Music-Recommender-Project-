@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Liked Playlists</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .liked-list {
+      max-width: 900px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.85);
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+    }
+    .liked-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      border-bottom: 1px solid #ddd;
+    }
+    .liked-item:last-child {
+      border-bottom: none;
+    }
+    .liked-item span {
+      font-size: 1.3rem;
+    }
+    .liked-item button {
+      background: #ff5c5c;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .sort-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    body.dark .liked-list {
+      background: rgba(30, 30, 40, 0.95);
+      color: #e0e0e0;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+    }
+  </style>
+</head>
+<body id="body">
+
+  <!-- Desktop Navigation -->
+  <header class="topbar desktop-nav">
+    <div class="brand">
+      <img src="../images/Moodmatelogo.png" alt="MoodMate Logo" />
+      <span>MoodMate</span>
+    </div>
+    <div class="middle">
+      <nav class="nav-links">
+        <a href="index.html#home">Home</a>
+        <a href="index.html#how-it-works">How It Works</a>
+        <a href="index.html#features">Features</a>
+        <a href="index.html#about">About</a>
+        <a href="liked.html">Liked Playlists</a>
+      </nav>
+    </div>
+    <div class="theme-toggle">
+      <img src="../images/darkmodeicon.png" alt="Toggle Theme" id="themeIcon" />
+    </div>
+  </header>
+
+  <!-- Mobile Navigation -->
+  <header class="mobile-header">
+    <div class="mobile-brand">
+      <img src="../images/Moodmatelogo.png" alt="MoodMate Logo" />
+      <span>MoodMate</span>
+    </div>
+    <button id="menuToggle" class="menu-icon" aria-label="Toggle menu">
+      <img src="../images/nav-icon.png" alt="Menu" />
+    </button>
+  </header>
+
+  <nav id="mobileMenu" class="mobile-nav">
+    <a href="index.html#home">Home</a>
+    <a href="index.html#how-it-works">How It Works</a>
+    <a href="index.html#features">Features</a>
+    <a href="index.html#about">About</a>
+    <a href="liked.html">Liked Playlists</a>
+    <div class="theme-toggle">
+      <img src="../images/darkmodeicon.png" alt="Toggle Theme" id="themeIconMobile" />
+    </div>
+  </nav>
+
+  <div class="section-wrapper">
+    <section class="whitebox">
+      <div class="liked-list">
+        <h2 class="section-title">❤️ Your Liked Playlists</h2>
+        <div class="sort-buttons">
+          <button onclick="sortPlaylists('time')">Sort by Time</button>
+          <button onclick="sortPlaylists('name')">Sort by Name</button>
+        </div>
+        <div id="likedContainer"></div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const container = document.getElementById("likedContainer");
+    const themeToggle = document.getElementById("themeIcon");
+    const themeToggleMobile = document.getElementById("themeIconMobile");
+    const body = document.getElementById("body");
+
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+      body.classList.add("dark");
+      themeToggle.src = "../images/lightmodeicon.png";
+      if (themeToggleMobile) themeToggleMobile.src = "../images/lightmodeicon.png";
+    }
+
+    function toggleTheme() {
+      body.classList.toggle("dark");
+      const isDark = body.classList.contains("dark");
+      localStorage.setItem("theme", isDark ? "dark" : "light");
+      const newIcon = isDark ? "../images/lightmodeicon.png" : "../images/darkmodeicon.png";
+      themeToggle.src = newIcon;
+      if (themeToggleMobile) themeToggleMobile.src = newIcon;
+    }
+
+    themeToggle.addEventListener("click", toggleTheme);
+    if (themeToggleMobile) themeToggleMobile.addEventListener("click", toggleTheme);
+
+    const menuToggle = document.getElementById("menuToggle");
+    const mobileMenu = document.getElementById("mobileMenu");
+
+    if (menuToggle && mobileMenu) {
+      menuToggle.addEventListener("click", () => {
+        mobileMenu.classList.toggle("show");
+      });
+
+      mobileMenu.querySelectorAll("a").forEach(link => {
+        link.addEventListener("click", () => {
+          mobileMenu.classList.remove("show");
+        });
+      });
+    }
+
+    let liked = JSON.parse(localStorage.getItem("likedPlaylists") || "[]");
+
+    function renderPlaylists() {
+      container.innerHTML = liked.map(p => `
+        <div class="liked-item">
+          <span><a href="playlist.html?id=${p.id}&name=${encodeURIComponent(p.name)}">${p.name}</a></span>
+          <button onclick="unlike('${p.id}')">Unlike</button>
+        </div>
+      `).join("");
+    }
+
+    function unlike(id) {
+      liked = liked.filter(p => p.id !== id);
+      localStorage.setItem("likedPlaylists", JSON.stringify(liked));
+      renderPlaylists();
+    }
+
+    function sortPlaylists(by) {
+      if (by === "name") {
+        liked.sort((a, b) => a.name.localeCompare(b.name));
+      } else {
+        liked.sort((a, b) => new Date(b.time) - new Date(a.time));
+      }
+      renderPlaylists();
+    }
+
+    renderPlaylists();
+  </script>
+</body>
+</html>

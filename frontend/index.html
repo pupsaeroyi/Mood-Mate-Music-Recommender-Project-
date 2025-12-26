@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MoodMate</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+  </style>
+</head>
+<body id="body">
+
+  <!-- Desktop Navigation -->
+  <header class="topbar desktop-nav">
+    <div class="brand">
+      <img src="../images/Moodmatelogo.png" alt="MoodMate Logo" />
+      <span>MoodMate</span>
+    </div>
+    <div class="middle">
+      <nav class="nav-links">
+        <a href="#home">Home</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#features">Features</a>
+        <a href="#about">About</a>
+        <a href="liked.html">Liked Playlists</a>
+      </nav>
+    </div>
+    <div class="theme-toggle">
+      <img src="../images/darkmodeicon.png" alt="Toggle Theme" id="themeIcon" />
+    </div>
+  </header>
+
+  <!-- Mobile Navigation -->
+  <header class="mobile-header">
+    <div class="mobile-brand">
+      <img src="../images/Moodmatelogo.png" alt="MoodMate Logo" />
+      <span>MoodMate</span>
+    </div>
+    <button id="menuToggle" class="menu-icon" aria-label="Toggle menu">
+      <img src="../images/nav-icon.png" alt="Menu" />
+    </button>
+  </header>
+
+  <nav id="mobileMenu" class="mobile-nav">
+    <a href="#home">Home</a>
+    <a href="#how-it-works">How It Works</a>
+    <a href="#features">Features</a>
+    <a href="#about">About</a>
+    <a href="liked.html">Liked Playlists</a>
+    <div class="theme-toggle">
+      <img src="../images/darkmodeicon.png" alt="Toggle Theme" id="themeIconMobile" />
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="section-wrapper">
+
+    <!-- Home -->
+    <section id="home" class="whitebox">
+      <div class="card">
+        <div class="text-area">
+          <div class="text-description">
+            <h1 class="logo">
+              <span class="logo-text-wrapper">
+                MoodMate <img src="../images/note.png" alt="Note Icon" class="note-icon" />
+              </span>
+            </h1>
+            <h2>Your emotional shift music companion</h2>
+            <p>Get personalized music based on your mood.</p>
+            <p>Just type how you're feeling, and MoodMate will do the rest!</p>
+          </div>
+
+          <div class="text-inputs">
+            <input type="text" placeholder="How are you feeling today? 😊" />
+            <label class="genre-label">Prefer a music type?</label>
+            <div class="genre-grid" id="genreGrid">
+              <button data-genre="">No preference</button>
+              <button data-genre="pop">Pop</button>
+              <button data-genre="rock">Rock</button>
+              <button data-genre="electronic">Electronic</button>
+              <button data-genre="hiphop">Hip Hop</button>
+              <button data-genre="metal">Metal</button>
+              <button data-genre="folk">Folk</button>
+              <button data-genre="classical">Classical</button>
+              <button data-genre="jazz">Jazz</button>
+              <button data-genre="rnb">R&B</button>
+              <button data-genre="country">Country</button>
+              <button data-genre="reggae">Reggae</button>
+              <button data-genre="thai">Thai</button>
+              <button data-genre="korean">Korean</button>
+              <button data-genre="japanese">Japanese</button>
+              <button data-genre="easylistening">Easy Listening</button>
+            </div>
+
+            <div class="buttons">
+              <button class="primary">Get Started</button>
+              <button id="focusModeBtn" class="secondary">Focus Mode</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="image-area">
+          <img src="../images/sun.png" alt="Mood Illustration" id="moodImage" />
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="whitebox">
+      <div class="card">
+        <h2 class="section-title">How It Works 🎯</h2>
+        <p>
+          MoodMate starts with a simple prompt: "How are you feeling today?" Users can enter a word, emoji, or even a misspelled phrase to describe their current mood.
+          Behind the scenes, MoodMate uses a powerful AI-based zero-shot classification model to interpret the input without relying on rigid keyword matching.
+          It also intelligently handles typos and emojis to better understand emotional intent. Once your mood is detected, MoodMate recommends curated Spotify playlists
+          that best match or support that emotional state, creating a more personal and responsive music experience.
+        </p>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="whitebox">
+      <div class="card">
+        <h2 class="section-title">Features 🌟</h2>
+        <ul>
+          <li><strong>Mood Input:</strong> A single-line prompt lets users share how they feel in their own words.</li>
+          <li><strong>Emotion Mapping:</strong> Classifies mood into categories like Happy, Focused, Sad, Heartbroken, etc.</li>
+          <li><strong>Emoji Recognition:</strong> Users can also input emojis such as 😊, 😢 or 💔 to express emotion. The system detects these and maps them to moods like happy, sad, heartbreak, or tired.</li>
+          <li><strong>Music Recommendation:</strong> Curated Spotify playlists are generated based on the detected mood or selected genre. This is done using the official Spotify Web API, which allows MoodMate to search, filter, and embed playlists dynamically without requiring users to log in to Spotify.</li>
+          <li><strong>Music Type Preference:</strong> Users can optionally select specific genres like Pop, Jazz, Thai, Korean, or R&B to influence the mood-matching process.</li>
+          <li><strong>Simple, Calming Interface:</strong> Clean, student-friendly UI for stress-free interaction.</li>
+          <li><strong>Dark Mode:</strong> Deep dark theme for late-night use.</li>
+          <li><strong>Light Mode:</strong> Relaxing theme for daytime focus.</li>
+          <li><strong>Focus Mode:</strong> One-tap study mode that instantly recommends lofi or ambient-style playlists for locking in.</li>
+          <li><strong>Share playlist:</strong> Users can copy and share the recommended playlist with a single click using the built-in share button.</li>
+          <li><strong>Refine playlist:</strong> Users can refine their recommended playlist by giving feedback like “Too sad” or “Not my vibe.” A new playlist is generated based on preferences while keeping the mood or focus context.</li>
+          <li><strong>Like / Unlike Playlist:</strong> Users can easily like a playlist with one click and revisit it anytime in the Liked tab. Their favorites are saved locally, so there's no need to sign in or create an account.</li>
+          <li><strong>Intuitive Navigation:</strong> A fixed top bar provides quick access to all major sections including Home, How It Works, Features, About, and Liked Playlists.</li>
+          <li><strong>Mobile Compatibility:</strong>  Fully responsive layout with touch-friendly controls, optimized navigation, and modals that scale smoothly for smaller screens.</li>
+          <li><strong>Zero-Shot Mood Classification:</strong> Uses a state of the art zero-shot AI model (DeBERTa-v3) to intelligently match mood input to the most fitting music category, no fixed labels or keywords required.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section id="about" class="whitebox">
+      <div class="card about-team">
+        <h2 class="section-title">About MoodMate 💜</h2>
+        <p>
+          MoodMate is a web-based music companion developed by Engineering students at Chulalongkorn University. By analyzing your emotional input, our system curates Spotify playlists that align with your current mood or help shift it in a positive direction.
+          Whether you're feeling joyful, sad, stressed, or somewhere in between, MoodMate provides a soothing and personalized musical journey to match your vibe.
+        </p>
+
+        <h2 class="section-title" style="margin-top: 2rem;">Meet Our Team 👩‍💻</h2>
+        <ul>
+          <li>Thanet Tanabodeejirapong</li>
+          <li>Natapat Suebsubanant</li>
+          <li>Athit Khunraj</li>
+        </ul>
+      </div>
+    </section>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

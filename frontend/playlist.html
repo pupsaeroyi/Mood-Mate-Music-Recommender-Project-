@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Recommended Playlist</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body id="body">
+  <!-- Desktop Navigation -->
+  <header class="topbar desktop-nav">
+    <div class="brand">
+      <img src="../images/Moodmatelogo.png" alt="MoodMate Logo" />
+      <span>MoodMate</span>
+    </div>
+    <div class="middle">
+      <nav class="nav-links">
+        <a href="index.html#home">Home</a>
+        <a href="index.html#how-it-works">How It Works</a>
+        <a href="index.html#features">Features</a>
+        <a href="index.html#about">About</a>
+        <a href="liked.html">Liked Playlists</a>
+      </nav>
+    </div>
+    <div class="theme-toggle">
+      <img src="../images/darkmodeicon.png" alt="Toggle Theme" id="themeIcon" />
+    </div>
+  </header>
+
+  <!-- Mobile Navigation -->
+  <header class="mobile-header">
+    <div class="mobile-brand">
+      <img src="../images/Moodmatelogo.png" alt="MoodMate Logo" />
+      <span>MoodMate</span>
+    </div>
+    <button id="menuToggle" class="menu-icon" aria-label="Toggle menu">
+      <img src="../images/nav-icon.png" alt="Menu" />
+    </button>
+  </header>
+
+  <nav id="mobileMenu" class="mobile-nav">
+    <a href="index.html#home">Home</a>
+    <a href="index.html#how-it-works">How It Works</a>
+    <a href="index.html#features">Features</a>
+    <a href="index.html#about">About</a>
+    <a href="liked.html">Liked Playlists</a>
+    <div class="theme-toggle">
+      <img src="../images/darkmodeicon.png" alt="Toggle Theme" id="themeIconMobile" />
+    </div>
+  </nav>
+
+  <div class="section-wrapper">
+    <section class="whitebox">
+      <div class="card playlist-card">
+        <h2 class="section-title">🎷 Your Recommended Playlist</h2>
+        <div id="embedArea"></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Refine Modal -->
+  <div id="refineModal" class="modal hidden">
+    <div class="modal-content">
+      <span class="close-modal" onclick="closeModal()">✖</span>
+      <h3>Help us improve your playlist</h3>
+      <form id="refineForm">
+        <label class="checkbox-row"><input type="checkbox" name="feedback" value="energetic" /> Too energetic</label>
+        <label class="checkbox-row"><input type="checkbox" name="feedback" value="sad" /> Too sad</label>
+        <label class="checkbox-row"><input type="checkbox" name="feedback" value="vocals" /> Has vocals</label>
+        <label class="checkbox-row"><input type="checkbox" name="feedback" value="not-vibe" /> Not my vibe</label>
+        <div class="modal-buttons">
+          <button type="submit">Get a new one</button>
+          <button type="button" onclick="closeModal()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+    const name = decodeURIComponent(params.get("name") || "");
+    const savedTheme = localStorage.getItem("theme");
+    const themeToggle = document.getElementById("themeIcon");
+    const themeToggleMobile = document.getElementById("themeIconMobile");
+    const body = document.getElementById("body");
+
+    if (savedTheme === "dark") {
+      body.classList.add("dark");
+      themeToggle.src = "../images/lightmodeicon.png";
+      if (themeToggleMobile) themeToggleMobile.src = "../images/lightmodeicon.png";
+    }
+
+    function toggleTheme() {
+      body.classList.toggle("dark");
+      const isDark = body.classList.contains("dark");
+      localStorage.setItem("theme", isDark ? "dark" : "light");
+      const icon = isDark ? "../images/lightmodeicon.png" : "../images/darkmodeicon.png";
+      themeToggle.src = icon;
+      if (themeToggleMobile) themeToggleMobile.src = icon;
+    }
+
+    themeToggle.addEventListener("click", toggleTheme);
+    if (themeToggleMobile) themeToggleMobile.addEventListener("click", toggleTheme);
+
+    const menuToggle = document.getElementById("menuToggle");
+    const mobileMenu = document.getElementById("mobileMenu");
+
+    if (menuToggle && mobileMenu) {
+      menuToggle.addEventListener("click", () => {
+        mobileMenu.classList.toggle("show");
+      });
+
+      mobileMenu.querySelectorAll("a").forEach(link => {
+        link.addEventListener("click", () => {
+          mobileMenu.classList.remove("show");
+        });
+      });
+    }
+
+    const embedContainer = document.getElementById("embedArea");
+    if (id) {
+      embedContainer.innerHTML = `
+        <div class="embed-wrapper">
+          <iframe 
+            src="https://open.spotify.com/embed/playlist/${id}"
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy">
+          </iframe>
+          <div class="playlist-buttons-row">
+            <button class="refine-button" id="refineBtn">
+              <img src="../images/refine-icon.png" alt="Refine Icon" />
+              <span>Refine playlist</span>
+            </button>
+            <button class="like-button" id="likeBtn">
+              <img src="../images/like-icon.png" alt="Like Icon" />
+              <span>Like this playlist</span>
+            </button>
+            <div class="share-button">
+              <img src="../images/share-icon.png" alt="Share Icon" />
+              <span>Share this playlist</span>
+            </div>
+          </div>
+        </div>
+      `;
+
+      setTimeout(() => {
+        document.querySelector(".share-button").addEventListener("click", () => {
+          navigator.clipboard.writeText(window.location.href);
+          alert("✅ Playlist link copied to clipboard!");
+        });
+
+        const modal = document.getElementById("refineModal");
+        const refineBtn = document.getElementById("refineBtn");
+        const likeBtn = document.getElementById("likeBtn");
+        const refineForm = document.getElementById("refineForm");
+
+        refineBtn.addEventListener("click", () => {
+          modal.classList.remove("hidden");
+        });
+
+        likeBtn.addEventListener("click", async () => {
+          try {
+            await fetch("http://localhost:3000/api/like", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                playlist: {
+                  id,
+                  name,
+                  url: `https://open.spotify.com/playlist/${id}`
+                }
+              })
+            });
+
+            let liked = JSON.parse(localStorage.getItem("likedPlaylists") || "[]");
+            const alreadyExists = liked.some(p => p.id === id);
+            if (!alreadyExists) {
+              liked.push({ id, name, time: new Date().toISOString() });
+              localStorage.setItem("likedPlaylists", JSON.stringify(liked));
+            }
+
+            alert("❤️ Playlist saved to liked!");
+          } catch (err) {
+            console.error("Like error:", err);
+            alert("Something went wrong while liking this playlist.");
+          }
+        });
+
+        refineForm.addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const feedback = [...refineForm.elements["feedback"]]
+            .filter(input => input.checked)
+            .map(input => input.value);
+
+          try {
+            const res = await fetch("http://localhost:3000/api/refine", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ previousId: id, category: name, feedback })
+            });
+
+            const data = await res.json();
+            if (data?.playlist) {
+              window.location.href = `playlist.html?id=${data.playlist.id}&name=${encodeURIComponent(data.playlist.name)}`;
+            } else {
+              alert("No better playlist found.");
+            }
+          } catch (err) {
+            console.error("Refine error:", err);
+            alert("Something went wrong. Try again.");
+          }
+        });
+      }, 100);
+    } else {
+      embedContainer.innerHTML = "<p>No playlist found.</p>";
+    }
+
+    function closeModal() {
+      document.getElementById("refineModal").classList.add("hidden");
+    }
+  </script>
+</body>
+</html>

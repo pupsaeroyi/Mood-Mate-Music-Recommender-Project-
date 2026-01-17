@@ -3,7 +3,7 @@ import fetch from "node-fetch";
 let accessToken = null;
 let tokenExpires = 0;
 
-// 🔑 Get Spotify access token
+// Get Spotify access token
 async function getAccessToken() {
   if (accessToken && Date.now() < tokenExpires) return accessToken;
 
@@ -23,7 +23,7 @@ async function getAccessToken() {
   return accessToken;
 }
 
-// ✅ Filter playlists for focus-safe tags (used only in focus mode)
+// Filter playlists for focus-safe tags (used only in focus mode)
 function isFocusApproved(playlist) {
   const text = `${playlist.name} ${playlist.description}`.toLowerCase();
   const good = ["lofi", "ambient", "study", "instrumental", "focus", "beats", "chillhop"];
@@ -35,11 +35,11 @@ function isFocusApproved(playlist) {
   );
 }
 
-// 🎯 Get Spotify playlist based on category + mood
+// Get Spotify playlist based on category + mood
 export default async function getSpotifyPlaylist(category, mood = "", options = { focusFilter: false }) {
   const token = await getAccessToken();
 
-  // 👇 Combine mood + category for smarter search (e.g., "sad korean")
+  // Combine mood + category for smarter search (e.g., "sad korean")
   const searchQuery = `${mood} ${category}`.trim();
   const query = encodeURIComponent(searchQuery);
   const limit = 50;
